@@ -3,7 +3,9 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 
 // Load User model
-const User = require('../models/User');
+const User = require('../models/user');
+// var FacebookStrategy = require('passport-facebook').Strategy;
+
 
 module.exports = function(passport) {
   passport.use(
@@ -38,4 +40,18 @@ module.exports = function(passport) {
       done(err, user);
     });
   });
+
+
+    // passport.use(new FacebookStrategy({
+    //         clientID: '393046504764290',
+    //         clientSecret: '57917db62742a905848d849ac48f86ea',
+    //         callbackURL: "localhost:5000/dashboard"
+    //     },
+    //     function(accessToken, refreshToken, profile, done) {
+    //         User.findOrCreate(..., function(err, user) {
+    //             if (err) { return done(err); }
+    //             done(null, user);
+    //         });
+    //     }
+    // ));
 };

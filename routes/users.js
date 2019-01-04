@@ -3,7 +3,7 @@ const router = express.Router();
 const bcrypt = require('bcryptjs');
 const passport = require('passport');
 // Load User model
-const User = require('../models/User');
+const User = require('../models/user.js');
 
 // Login Page
 router.get('/login', (req, res) => res.render('login'));
@@ -24,9 +24,14 @@ router.post('/register', (req, res) => {
     errors.push({ msg: 'Passwords do not match' });
   }
 
-  if (password.length < 6) {
+  if (password.length < 8) {
     errors.push({ msg: 'Password must be at least 6 characters' });
   }
+
+    if (!validatePassword(password)) {
+        errors.push({ msg: 'Password should contain: Minimum eight characters, at least one uppercase letter, one lowercase letter, one number and one special character' });
+
+    }
 
   if (errors.length > 0) {
     res.render('register', {
@@ -90,5 +95,21 @@ router.get('/logout', (req, res) => {
   req.flash('success_msg', 'You are logged out');
   res.redirect('/users/login');
 });
+
+
+function validateEmail(email) {
+    var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(email);
+}
+
+function validateName(name) {
+    var re = /^[a-z ,.'-]+$/;
+    return re.test(name);
+}
+
+function validatePassword(password) {
+    var re = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    return re.test(password);
+}
 
 module.exports = router;
